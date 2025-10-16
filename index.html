@@ -1,353 +1,185 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TV Typography Tester</title>
-  <style>
-    :root{
-      --bg: #0b0f19; /* dark navy */
-      --fg: #e6e8ee;
-      --muted: #9aa4b2;
-      --accent: #7cc4ff;
-      --card: #141b2d;
-      --card-2: #101625;
-      --border: #263043;
-      --ok: #3ed598;
-      --warn: #ffd166;
-      --danger: #ff7b7b;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TV Font Simple Tester</title>
+<style>
+  /* —— Base minimal —— */
+  :root{ --bg:#0b0f19; --fg:#eef2ff; --muted:#9aa4b2; --card:#141b2d; --border:#263043; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial; background:var(--bg); color:var(--fg); }
+  header{ position:sticky; top:0; background:#0d1323; border-bottom:1px solid var(--border); padding:10px 12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  header .k{ color:var(--muted); font-size:12px; }
+  header select{ background:#0f1525; color:var(--fg); border:1px solid var(--border); border-radius:8px; padding:6px 8px; }
+  main{ padding:16px; display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .card{ background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:14px; padding:14px; }
+  .title{ font-size:14px; color:#cfe1ff; margin:0 0 8px; opacity:.9 }
+  .muted{ color:var(--muted); font-size:12px; }
+  .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .sample{ border:1px dashed #2c3853; border-radius:12px; padding:12px; }
+  .tag{ display:inline-block; font-size:11px; color:#cfe1ff; background:#0f1525; border:1px solid var(--border); padding:4px 8px; border-radius:999px; margin:0 6px 6px 0; }
 
-      /* Base that we'll adjust dynamically */
-      --root-size: 18px;
-    }
+  /* —— Tu CSS responsivo EXACTO —— */
+  .fs-Cscreen { font-weight: bold; }
+  .fs-Ctext { font-weight: bold; }
+  .fs-Ctext_screen { font-weight: bold; }
 
-    html { font-size: var(--root-size); }
-    body {
-      margin:0; color: var(--fg); background: radial-gradient(1200px 800px at 15% 0%, #121a2a 0%, #0b0f19 50%, #0b0f19 100%);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      min-height: 100svh; display:grid; grid-template-columns: 360px 1fr; gap:24px; align-items: stretch;
-    }
+  @media (min-width: 720px) {
+      .fs-Cscreen { font-size: 70px; font-weight: bold; }
+      .fs-Ctext{ font-size: 25px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 30px; font-weight: bold; }
+  }
+  @media (min-width: 1000px) {
+      .fs-Cscreen { font-size: 90px; font-weight: bold; }
+      .fs-Ctext{ font-size: 35px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 80px; }
+  }
+  @media (min-width: 1700px) {
+      .fs-Cscreen { font-size: 160px; font-weight: bold; }
+      .fs-Ctext{ font-size: 60px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 90px; font-weight: bold; }
+  }
+  @media (min-width: 1900px) {
+      .fs-Cscreen { font-size: 180px; font-weight: bold; }
+      .fs-Ctext{ font-size: 70px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 100px; font-weight: bold; }
+  }
+  @media (min-width: 2200px) {
+      .fs-Cscreen { font-size: 200px; font-weight: bold; }
+      .fs-Ctext{ font-size: 80px; }
+      .fs-Ctext_screen{ font-size: 110px; font-weight: bold; }
+  }
+  @media (min-width: 2400px) {
+      .fs-Cscreen { font-size: 220px; font-weight: bold; }
+      .fs-Ctext{ font-size: 90px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 120px; font-weight: bold; }
+  }
+  @media (min-width: 2600px) {
+      .fs-Cscreen { font-size: 240px; }
+      .fs-Ctext{ font-size: 130px; font-weight: bold; }
+      .fs-Ctext_screen{ font-size: 130px; font-weight: bold; }
+  }
 
-    aside.controls{
-      background: linear-gradient(180deg, var(--card), var(--card-2));
-      border-right:1px solid var(--border);
-      padding:20px 18px; position: sticky; top:0; height:100svh; overflow:auto;
-    }
-    main.preview{ padding:20px; }
-
-    h1,h2,h3,h4,h5,h6{ margin:0.6em 0 0.35em; line-height:1.15; }
-    p{ line-height:1.6; color: var(--fg); }
-    small{ color: var(--muted); }
-
-    .card{ background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border:1px solid var(--border); border-radius:16px; padding:14px 16px; box-shadow: 0 6px 22px rgba(0,0,0,0.18); }
-    .controls .card + .card{ margin-top:14px; }
-
-    label{ font-size:0.9rem; color: var(--muted); display:block; margin-bottom:6px; }
-    input[type="number"], input[type="range"], select{
-      width:100%; box-sizing:border-box; background:#0f1525; color:var(--fg); border:1px solid var(--border); border-radius:10px; padding:8px 10px; font-size:0.95rem;
-    }
-    input[type="range"]{ padding:0; height: 28px; }
-    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .row3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; }
-
-    .title{ font-weight:600; letter-spacing:0.2px; margin-bottom:8px; color:#d8deea; }
-    .muted{ color: var(--muted); }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:0.9rem; }
-
-    .badge{ display:inline-flex; align-items:center; gap:8px; background:#0f1525; border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:0.85rem; color:#cfe1ff; }
-    .badges{ display:flex; flex-wrap:wrap; gap:8px; }
-
-    .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; }
-
-    .sample{ padding:18px; border:1px dashed #2c3853; border-radius:14px; background: rgba(124,196,255,0.04); position:relative; overflow:hidden; }
-    .sample h1{ font-size: 2.4rem; }
-    .sample h2{ font-size: 2rem; }
-    .sample h3{ font-size: 1.6rem; }
-    .sample h4{ font-size: 1.3rem; }
-    .sample p{ font-size: 1rem; }
-    .sample .fine{ font-size: 0.85rem; color: var(--muted); }
-    .sample .mega{ font-size: 3rem; font-weight:700; }
-    .sample .ticker{ font-size: 3.5rem; font-weight:800; letter-spacing: 0.02em; }
-
-    .kpi{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .kpi .card{ text-align:center; }
-    .kpi .label{ color: var(--muted); font-size:0.8rem; }
-    .kpi .value{ font-size:1.2rem; font-weight:600; }
-
-    .safe-overlay{ position: fixed; inset:0; pointer-events:none; display:none; }
-    .safe-overlay.on{ display:block; }
-    .safe-overlay .mask{ position:absolute; inset:5%; outline: 999vmax solid rgba(255, 209, 102, 0.18); border: 2px dashed var(--warn); }
-    .safe-overlay .label{ position:absolute; top:6%; left:6%; background:rgba(0,0,0,0.45); color:var(--warn); padding:4px 8px; border-radius:8px; font-size:0.9rem; }
-
-    .footer{ margin-top: 14px; color: var(--muted); font-size:0.85rem; }
-    .btn{ background: linear-gradient(180deg, #1d2a45, #17223a); border:1px solid var(--border); color:#cfe1ff; border-radius:10px; padding:8px 10px; cursor:pointer; }
-    .btn:active{ transform: translateY(1px); }
-
-    @media (max-width: 980px){ body{ grid-template-columns: 1fr; } aside.controls{ position: static; height:auto; } }
-    /* Chips de tamaño en px */
-  .px-chip{ display:inline-block; margin-left:8px; padding:2px 6px; border:1px solid var(--border); border-radius:8px; font-size:11px; color:#cfe1ff; background:#0f1525; vertical-align:middle; opacity:.9 }
+  /* Defaults para <720px para que no queden en 0 */
+  @media (max-width: 719.98px){
+    .fs-Cscreen { font-size: 48px; }
+    .fs-Ctext { font-size: 20px; }
+    .fs-Ctext_screen { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
-  <aside class="controls">
-    <div class="title">TV Typography Tester</div>
-    <div class="muted" style="margin-bottom:12px">Ajusta tamaño base según <strong>pulgadas, resolución y distancia</strong>. Luego evalúa los textos a la derecha.</div>
-
-    <div class="controls">
-      <div class="card">
-        <div class="title">1) Presets rápidos</div>
-        <select id="preset">
-          <option value="custom">— Personalizado —</option>
-          <option value='{"diag":42,"w":1920,"h":1080}'>42″ — 1920×1080</option>
-          <option value='{"diag":42,"w":3840,"h":2160}'>42″ — 3840×2160 (4K)</option>
-          <option value='{"diag":55,"w":3840,"h":2160}'>55″ — 3840×2160 (4K)</option>
-          <option value='{"diag":65,"w":3840,"h":2160}'>65″ — 3840×2160 (4K)</option>
-          <option value='{"diag":75,"w":3840,"h":2160}'>75″ — 3840×2160 (4K)</option>
-          <option value='{"diag":85,"w":7680,"h":4320}'>85″ — 7680×4320 (8K)</option>
-        </select>
-      </div>
-
-      <div class="card">
-        <div class="title">2) Parámetros del panel</div>
-        <div class="row">
-          <div>
-            <label>Diagonal (pulgadas)</label>
-            <input type="number" id="diag" value="55" step="0.1" min="10" />
-          </div>
-          <div>
-            <label>devicePixelRatio</label>
-            <input type="number" id="dpr" value="1" step="0.1" min="0.5" />
-          </div>
-        </div>
-        <div class="row">
-          <div>
-            <label>Ancho en píxeles del panel</label>
-            <input type="number" id="wpx" value="3840" step="1" min="640" />
-          </div>
-          <div>
-            <label>Alto en píxeles del panel</label>
-            <input type="number" id="hpx" value="2160" step="1" min="360" />
-          </div>
-        </div>
-        <small class="muted">Tip: si abres esto en el TV, prueba <span class="mono">w×h ≈ screen.width×devicePixelRatio</span> y <span class="mono">screen.height×devicePixelRatio</span>. Muchos TVs usan DPR=1.</small>
-      </div>
-
-      <div class="card">
-        <div class="title">3) Contexto de visualización</div>
-        <div class="row">
-          <div>
-            <label>Distancia (metros)</label>
-            <input type="number" id="distance" value="2.5" step="0.1" min="0.5" />
-          </div>
-          <div>
-            <label>Legibilidad objetivo (arcmin)</label>
-            <input type="number" id="arcmin" value="20" step="1" min="10" max="40" />
-          </div>
-        </div>
-        <div class="row">
-          <div>
-            <label>Relación x‑height / font-size</label>
-            <input type="number" id="xheight" value="0.5" step="0.01" min="0.4" max="0.7" />
-          </div>
-          <div>
-            <label>Escala manual (× rem)</label>
-            <input type="range" id="scale" min="0.6" max="1.6" value="1" step="0.01" />
-          </div>
-        </div>
-        <div style="display:flex; gap:8px; align-items:center; margin-top:10px">
-          <button class="btn" id="apply">Calcular y aplicar</button>
-          <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
-            <input type="checkbox" id="safe" /> <span>Mostrar área segura 5%</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="title">Resultados</div>
-        <div class="kpi">
-          <div class="card">
-            <div class="label">PPI estimado</div>
-            <div class="value" id="ppi">—</div>
-          </div>
-          <div class="card">
-            <div class="label">mm por píxel</div>
-            <div class="value" id="mmpp">—</div>
-          </div>
-          <div class="card">
-            <div class="label">x‑height objetivo</div>
-            <div class="value" id="xmm">—</div>
-          </div>
-          <div class="card">
-            <div class="label">font-size recomendado</div>
-            <div class="value" id="fontpx">—</div>
-          </div>
-        </div>
-        <div class="footer">
-          <div class="title" style="margin-top:10px">CSS sugerido (base)</div>
-          <pre class="mono" id="cssOut">:root{ font-size: 18px; } /* se reemplaza dinámicamente */</pre>
-          <small>Idea: usa <span class="mono">clamp()</span> con <span class="mono">vh</span> y <span class="mono">vw</span> para escalar entre 1080p y 4K.
-          <br>Ejemplo genérico: <span class="mono">:root{ font-size: clamp(14px, 1.8vh, 24px); }</span></small>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="title">Notas</div>
-        <ul class="muted" style="padding-left:18px">
-          <li>La legibilidad cómoda suele estar entre <strong>18–24 arcmin</strong> para la <em>x‑height</em>.</li>
-          <li>Si tu TV recorta bordes (overscan), activa el overlay de <strong>área segura 5%</strong>.</li>
-          <li>Tipografías con x‑height alta (Inter, Roboto) se leen mejor a igualdad de px.</li>
-        </ul>
-      </div>
+  <header>
+    <div class="row">
+      <span class="k">Viewport:</span> <strong id="vp">—</strong>
+      <span class="k">Breakpoint activo:</span> <strong id="bp">—</strong>
     </div>
-  </aside>
-
-  <main class="preview">
-    <div class="badges">
-      <div class="badge">Base <span id="baseRem">—</span> (px)</div>
-      <div class="badge">Escala ×<span id="scaleOut">1.00</span></div>
-      <div class="badge">Viewport: <span id="vp">—</span> CSS px</div>
+    <div class="row">
+      <label class="k">Fuente:</label>
+      <select id="fontSel">
+        <option value="system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial">System UI</option>
+        <option value="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial">Inter</option>
+        <option value="Roboto, system-ui, -apple-system, Segoe UI, Arial">Roboto</option>
+        <option value="Noto Sans, system-ui, -apple-system, Segoe UI, Arial">Noto Sans</option>
+        <option value="Montserrat, system-ui, -apple-system, Segoe UI, Arial">Montserrat</option>
+        <option value="Poppins, system-ui, -apple-system, Segoe UI, Arial">Poppins</option>
+        <option value="Bebas Neue, system-ui, -apple-system, Segoe UI, Arial">Bebas Neue (display)</option>
+        <option value="Oswald, system-ui, -apple-system, Segoe UI, Arial">Oswald (display)</option>
+        <option value="Roboto Mono, ui-monospace, Menlo, Consolas, monospace">Roboto Mono</option>
+      </select>
+      <small class="muted">Consejo: usa F11 para ver a pantalla completa en el TV.</small>
     </div>
+  </header>
 
-    <div class="grid" style="margin-top:14px">
-      <div class="sample">
-        <h1>H1 — Título principal</h1>
-        <p>Para dashboards en TV a 2–3 m, evita bloques de texto largos. Usa contraste alto y espacios amplios.</p>
-        <p class="fine">Fine print — detalles secundarios y leyendas.</p>
+  <main>
+    <section class="card">
+      <h3 class="title">Opción A — Titular / Pantalla</h3>
+      <div class="row">
+        <span class="tag">.fs-Cscreen</span>
+        <span class="tag">bold</span>
       </div>
       <div class="sample">
-        <h2>H2 — Sección</h2>
-        <h3>H3 — Subtítulo</h3>
-        <p>El tamaño base controla todas las escalas. Ajusta la <strong>escala manual</strong> para simular preferencias.</p>
+        <div class="fs-Cscreen">ALERTA URGENTE</div>
+        <div class="muted">Escala según tus @media.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3 class="title">Opción B — Texto principal</h3>
+      <div class="row">
+        <span class="tag">.fs-Ctext</span>
+        <span class="tag">bold</span>
       </div>
       <div class="sample">
-        <div class="mega">123 456</div>
-        <p>KPI grande — para métricas destacadas.</p>
+        <div class="fs-Ctext">Paciente en triage, espere indicaciones.</div>
+        <p class="muted">Prueba párrafo con la misma clase para ver interlineado.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3 class="title">Opción C — Texto de pantalla</h3>
+      <div class="row">
+        <span class="tag">.fs-Ctext_screen</span>
+        <span class="tag">bold</span>
       </div>
       <div class="sample">
-        <div class="ticker">🟢 En servicio</div>
-        <p>Texto tipo “marquesina”/estado con alto impacto visual.</p>
+        <div class="fs-Ctext_screen">Turno A-023 pase a ventanilla 3</div>
+        <p class="muted">Ideal para marcadores de estado, turnos y rótulos.</p>
       </div>
-    </div>
+    </section>
+
+    <section class="card">
+      <h3 class="title">Combinaciones</h3>
+      <div class="row">
+        <span class="tag">H1: .fs-Cscreen</span>
+        <span class="tag">Lead: .fs-Ctext_screen</span>
+        <span class="tag">Body: .fs-Ctext</span>
+      </div>
+      <div class="sample">
+        <div class="fs-Cscreen">EN SERVICIO</div>
+        <div class="fs-Ctext_screen">Sala de procedimientos</div>
+        <div class="fs-Ctext">Siga las señales amarillas hasta el consultorio 4.</div>
+      </div>
+    </section>
   </main>
 
-  <div class="safe-overlay" id="safeOverlay">
-    <div class="mask"></div>
-    <div class="label">Área segura 5%</div>
-  </div>
-
   <script>
-    const $ = (q)=>document.querySelector(q);
-    const $text = (el, v)=>{ el.textContent = v; };
+    const vp = document.getElementById('vp');
+    const bp = document.getElementById('bp');
+    const fontSel = document.getElementById('fontSel');
 
-    const el = {
-      preset: $('#preset'),
-      diag: $('#diag'), dpr: $('#dpr'), wpx: $('#wpx'), hpx: $('#hpx'),
-      dist: $('#distance'), arcmin: $('#arcmin'), xheight: $('#xheight'),
-      scale: $('#scale'), scaleOut: $('#scaleOut'),
-      ppi: $('#ppi'), mmpp: $('#mmpp'), xmm: $('#xmm'), fontpx: $('#fontpx'),
-      cssOut: $('#cssOut'), baseRem: $('#baseRem'), vp: $('#vp'),
-      apply: $('#apply'), safe: $('#safe'), safeOverlay: $('#safeOverlay')
-    };
-
-    function computePPI(w, h, diag){
-      const pxDiag = Math.sqrt(w*w + h*h);
-      return pxDiag / diag; // px por pulgada
+    function upd(){
+      vp.textContent = window.innerWidth + '×' + window.innerHeight;
+      const w = window.innerWidth;
+      let brk = '<720';
+      if(w>=2600) brk='≥2600';
+      else if(w>=2400) brk='≥2400';
+      else if(w>=2200) brk='≥2200';
+      else if(w>=1900) brk='≥1900';
+      else if(w>=1700) brk='≥1700';
+      else if(w>=1000) brk='≥1000';
+      else if(w>=720) brk='≥720';
+      bp.textContent = brk;
     }
+    window.addEventListener('resize', upd);
+    upd();
 
-    function arcminToRadians(arcmin){
-      return (arcmin/60) * Math.PI/180; // grados -> radianes
-    }
-
-    function recommendedFontPx({distance_m, arcmin, xheight_ratio, ppi}){
-      // Altura física necesaria (mm) para la x-height a la distancia dada
-      const theta = arcminToRadians(arcmin);
-      const height_mm = Math.tan(theta) * (distance_m * 1000); // aproximación ángulo pequeño
-      // Convertir a píxeles
-      const mm_per_px = 25.4 / ppi;
-      const x_px = height_mm / mm_per_px;
-      // font-size ~ x-height / ratio
-      const font_px = x_px / xheight_ratio;
-      return { font_px, x_px, mm_per_px };
-    }
-
-    function applyNow(){
-      // Lee valores actuales
-      const diag = parseFloat(el.diag.value || '55');
-      const w = parseInt(el.wpx.value || '3840', 10);
-      const h = parseInt(el.hpx.value || '2160', 10);
-      const dpr = parseFloat(el.dpr.value || '1');
-      const distance = parseFloat(el.dist.value || '2.5');
-      const arcmin = parseFloat(el.arcmin.value || '20');
-      const xratio = parseFloat(el.xheight.value || '0.5');
-      const scale = parseFloat(el.scale.value || '1');
-
-      // PPI y recomendación de base
-      const ppi = computePPI(w, h, diag);
-      const { font_px, x_px, mm_per_px } = recommendedFontPx({ distance_m: distance, arcmin, xheight_ratio: xratio, ppi });
-
-      // Aplica root-size (escalado manual adicional)
-      const applied = Math.max(10, Math.round(font_px * scale));
-      document.documentElement.style.setProperty('--root-size', applied + 'px');
-
-      // KPIs
-      $text(el.ppi, ppi.toFixed(1) + ' ppi');
-      $text(el.mmpp, mm_per_px.toFixed(3) + ' mm/px');
-      $text(el.xmm, x_px.toFixed(1) + ' px (x-height)');
-      $text(el.fontpx, applied + ' px');
-      $text(el.baseRem, getComputedStyle(document.documentElement).fontSize);
-      $text(el.scaleOut, scale.toFixed(2));
-      $text(el.vp, window.innerWidth + '×' + window.innerHeight);
-
-      // Genera CSS sugerido
-      const css = `:root{\n  /* Calculado para ${diag}\" @ ${w}×${h}, distancia ${distance}m, ${arcmin} arcmin, x-height=${xratio} */\n  font-size: ${applied}px;\n}\n\n/* Alternativa elástica entre 1080p y 4K */\n:root{\n  /* Ajusta estos límites a tu contexto */\n  font-size: clamp(14px, 1.6vh + 0.2vw, 24px);\n}`;
-      el.cssOut.textContent = css;
-    }
-
-    // Eventos
-    el.apply.addEventListener('click', applyNow);
-    el.scale.addEventListener('input', applyNow);
-    el.safe.addEventListener('change', ()=>{
-      el.safeOverlay.classList.toggle('on', el.safe.checked);
-    });
-
-    el.preset.addEventListener('change', ()=>{
-      const v = el.preset.value;
-      if(v !== 'custom'){
-        try{
-          const obj = JSON.parse(v);
-          el.diag.value = obj.diag;
-          el.wpx.value = obj.w;
-          el.hpx.value = obj.h;
-          el.dpr.value = 1;
-        }catch(e){ /* ignore */ }
-      }
-      applyNow();
-    });
-
-    // Init with current screen as hint
-    (function initFromScreen(){
-      try{
-        const w = (window.screen && window.screen.width ? window.screen.width : window.innerWidth) * (window.devicePixelRatio || 1);
-        const h = (window.screen && window.screen.height ? window.screen.height : window.innerHeight) * (window.devicePixelRatio || 1);
-        if(Number.isFinite(w) && Number.isFinite(h)){
-          el.wpx.value = Math.round(w);
-          el.hpx.value = Math.round(h);
-          el.dpr.value = (window.devicePixelRatio || 1).toFixed(2);
+    fontSel.addEventListener('change', ()=>{
+      document.body.style.fontFamily = fontSel.value;
+      // Carga Google Fonts cuando haga falta
+      const fam = fontSel.value.split(',')[0].trim();
+      const gf = ['Inter','Roboto','Noto Sans','Montserrat','Poppins','Bebas Neue','Oswald','Roboto Mono'];
+      if(gf.includes(fam)){
+        const id = 'gf-'+fam.replace(/\s+/g,'-');
+        if(!document.getElementById(id)){
+          const l = document.createElement('link');
+          l.id = id; l.rel='stylesheet';
+          l.href = 'https://fonts.googleapis.com/css2?family='+encodeURIComponent(fam)+':wght@400;700;900&display=swap';
+          document.head.appendChild(l);
         }
-      }catch(e){}
-      applyNow();
-    })();
-
-    window.addEventListener('resize', ()=>{
-      $text(el.vp, window.innerWidth + '×' + window.innerHeight);
+      }
     });
-  // === PX size chips ===
-function ensurePxChip(el){ var chip = el.nextElementSibling; if(!chip || !chip.classList.contains('px-chip')){ chip = document.createElement('span'); chip.className='px-chip'; el.after(chip);} return chip; }
-function updatePxChips(){ var selectors = ['.preview h1','.preview h2','.preview h3','.preview h4','.preview p','.preview .mega','.preview .ticker']; for(var i=0;i<selectors.length;i++){ document.querySelectorAll(selectors[i]).forEach(function(el){ var fs = parseFloat(getComputedStyle(el).fontSize)||0; var chip = ensurePxChip(el); chip.textContent = Math.round(fs)+' px'; }); } }
-window.addEventListener('resize', updatePxChips);
-var applyBtn = document.getElementById('apply'); if(applyBtn){ applyBtn.addEventListener('click', function(){ setTimeout(updatePxChips, 0); }); }
-var scaleInput = document.getElementById('scale'); if(scaleInput){ scaleInput.addEventListener('input', updatePxChips); }
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(updatePxChips, 50); });
-</script>
+  </script>
 </body>
 </html>
